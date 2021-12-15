@@ -2,6 +2,7 @@ package main
 
 import (
 	"go-react-api/src/database"
+	"go-react-api/src/routes"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -9,10 +10,9 @@ import (
 func main() {
 	database.Connect()
 	database.AutoMigrate()
-
 	app := fiber.New()
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("hello, world")
-	})
+
+	routes.Setup(app)
+
 	app.Listen(":8000")
 }

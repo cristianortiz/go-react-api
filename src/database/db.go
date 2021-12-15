@@ -1,12 +1,16 @@
 package database
 
 import (
+	//if in mod.go te app module is:
+	//go-react-api/src/models the projects files can be imported like
+	//go-react-api/src/models
 	"go-react-api/src/models"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
+//global pointer var to send querys
 var DB *gorm.DB
 
 // Connect function use gorm functions to connect to DB
