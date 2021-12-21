@@ -15,5 +15,7 @@ func Setup(app *fiber.App) {
 	//this complete route is /api/admin/register
 	admin.Post("/register", controllers.Register)
 	admin.Post("/login", controllers.Login)
+	admin.Post("/logout", controllers.Logout)
+	admin.Get("/auth-user", controllers.AuthenticatedUser)
 
 }
