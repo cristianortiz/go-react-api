@@ -121,6 +121,7 @@ func AuthenticatedUser(c *fiber.Ctx) error {
 	}
 	payload := token.Claims.(*jwt.StandardClaims)
 	//query the user data from DB with their id stored in jwt
+	//TODO: this also can be set in jwt claims and do not query the user data again
 	var user models.User
 	//payload.Subject stores the id of the user logged
 	database.DB.Where("id = ?", payload.Subject).First(&user)
