@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"go-react-api/src/database"
+	"go-react-api/src/middlewares"
 	"go-react-api/src/models"
 	"strconv"
 
@@ -106,25 +107,16 @@ func Login(c *fiber.Ctx) error {
 	})
 }
 
-//AuthenticatedUser returns the data of a logged user, using the jwt in cookie stored in fiber context
-func AuthenticatedUser(c *fiber.Ctx) error {
-	//get the cookie from fiber context
-	cookie := c.Cookies("jwt")
-	token, err := jwt.ParseWithClaims(cookie, &jwt.StandardClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte("ReactGoAPI"), nil
-	})
-	if err != nil || !token.Valid {
-		c.Status(fiber.StatusUnauthorized)
-		return c.JSON(fiber.Map{
-			"msg": "Invalid credentials",
-		})
-	}
-	payload := token.Claims.(*jwt.StandardClaims)
-	//query the user data from DB with their id stored in jwt
+// returns the data of a logged user, using the jwt in stored cookie, and validated by middlewares
+func GetUser(c *fiber.Ctx) error {
+
+	//query the user data from DB with their id stored in jwt through middlewares function
 	//TODO: this also can be set in jwt claims and do not query the user data again
+	id, _ := middlewares.GetUserIdFromJWT(c)
 	var user models.User
-	//payload.Subject stores the id of the user logged
-	database.DB.Where("id = ?", payload.Subject).First(&user)
+	//get user logged data from DB
+	database.DB.Where("id = ?", id).First(&user)
+
 	return c.JSON(user)
 
 }

@@ -2,6 +2,7 @@ package routes
 
 import (
 	"go-react-api/src/controllers"
+	"go-react-api/src/middlewares"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -12,10 +13,14 @@ func Setup(app *fiber.App) {
 	api := app.Group("api")
 	//url prefix for admin module inside api prefix
 	admin := api.Group("admin")
+
 	//this complete route is /api/admin/register
 	admin.Post("/register", controllers.Register)
 	admin.Post("/login", controllers.Login)
-	admin.Post("/logout", controllers.Logout)
-	admin.Get("/auth-user", controllers.AuthenticatedUser)
+
+	//middleware to check user credentiales with jwt
+	adminAuthenticated := admin.Use(middlewares.IsAuthenticated)
+	adminAuthenticated.Get("/get-user", controllers.GetUser)
+	adminAuthenticated.Post("/logout", controllers.Logout)
 
 }
