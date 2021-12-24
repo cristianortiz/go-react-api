@@ -14,13 +14,13 @@ type User struct {
 	IsAmbassador bool   `json:"-"`
 }
 
-//PasswordEncryption receiver encrypts the user pass usin bcrypt library
+//PasswordEncryption receiver encrypts and set the user pass  field using bcrypt library
 func (user *User) SetAndEncryptPassword(pass string) {
 	//number of layer for encryption algo
 	cost := 8
 	//GeneratesFormPassword only accepts a slice of bytes []byte
 	bytes, _ := bcrypt.GenerateFromPassword([]byte(pass), cost)
-	//return the encrypted password as string
+	//set in Password field the encrypted password as string
 	user.Password = string(bytes)
 }
 

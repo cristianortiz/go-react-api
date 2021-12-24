@@ -136,6 +136,56 @@ func Logout(c *fiber.Ctx) error {
 	})
 }
 
+//UpdateUserInfo() controller function to update the data of an existing an logged user
+func UpdateUserInfo(c *fiber.Ctx) error {
+
+	//map to store the thata received in request
+	var data map[string]string
+	//get data from the http request and assign it to data map
+	err := c.BodyParser(&data)
+	if err != nil {
+		return err
+	}
+	id, _ := middlewares.GetUserIdFromJWT(c)
+
+	user := models.User{
+		Id:        id,
+		FirstName: data["firstname"],
+		LastName:  data["lastname"],
+		Email:     data["email"],
+	}
+	database.DB.Model(&user).Updates(&user)
+	return c.JSON(user)
+
+}
+
+//UpdateUserInfo() controller function to update the data of an existing an logged user
+func UpdateUserPassword(c *fiber.Ctx) error {
+	//map to store the thata received in request
+	var data map[string]string
+	//get data from the http request and assign it to data map
+	err := c.BodyParser(&data)
+	if err != nil {
+		return err
+	}
+
+	if data["upassword"] != data["upassword_confirm"] {
+		return c.JSON(fiber.Map{
+			"message": "passwords do not match",
+		})
+	}
+	id, _ := middlewares.GetUserIdFromJWT(c)
+
+	user := models.User{
+		Id: id,
+	}
+	//encrypts and set the password field for user model
+	user.SetAndEncryptPassword(data["upassword"])
+	database.DB.Model(&user).Updates(&user)
+	return c.JSON(user)
+
+}
+
 //UserEmailExists checks if the user emails receives as a paramater in request exists as a username
 func UserEmailExists(email string) (models.User, bool) {
 
