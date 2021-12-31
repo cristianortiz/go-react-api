@@ -20,14 +20,16 @@ func Setup(app *fiber.App) {
 
 	//middleware to check user credentiales with jwt
 	adminAuthenticated := admin.Use(middlewares.IsAuthenticated)
-	adminAuthenticated.Get("/get-user", controllers.GetUser)
+	adminAuthenticated.Get("/user", controllers.GetUser)
 	adminAuthenticated.Post("/logout", controllers.Logout)
 	adminAuthenticated.Put("/update-user", controllers.UpdateUserInfo)
 	adminAuthenticated.Put("/update-password", controllers.UpdateUserPassword)
 	//ambassadors endpoints
-	adminAuthenticated.Get("/get-ambassadors", controllers.GetAmbassadors)
-	//products endpints
-	adminAuthenticated.Get("/get-products", controllers.GetProducts)
+	adminAuthenticated.Get("/ambassadors", controllers.GetAmbassadors)
+	//products endpoints
+	adminAuthenticated.Get("/products", controllers.GetProducts)
 	adminAuthenticated.Post("/create-product", controllers.CreateProduct)
 	adminAuthenticated.Get("/product/:id", controllers.GetProductByID)
+	adminAuthenticated.Put("/product/:id", controllers.UpdateProduct)
+	adminAuthenticated.Delete("/product/:id", controllers.DeleteProduct)
 }
