@@ -6,7 +6,7 @@ import (
 
 //User struct to create user table yn DB with automigration
 type User struct {
-	Id           uint   `json:"id"`
+	Model
 	FirstName    string `json:"firstname"`
 	LastName     string `json:"lastname"`
 	Email        string `json:"email" gorm:"unique"`

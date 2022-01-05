@@ -149,11 +149,13 @@ func UpdateUserInfo(c *fiber.Ctx) error {
 	id, _ := middlewares.GetUserIdFromJWT(c)
 
 	user := models.User{
-		Id:        id,
+
 		FirstName: data["firstname"],
 		LastName:  data["lastname"],
 		Email:     data["email"],
 	}
+	//for Model embebed
+	user.Id = id
 	database.DB.Model(&user).Updates(&user)
 	return c.JSON(user)
 
@@ -176,9 +178,9 @@ func UpdateUserPassword(c *fiber.Ctx) error {
 	}
 	id, _ := middlewares.GetUserIdFromJWT(c)
 
-	user := models.User{
-		Id: id,
-	}
+	//for Model embebed
+	user := models.User{}
+	user.Id = id
 	//encrypts and set the password field for user model
 	user.SetAndEncryptPassword(data["upassword"])
 	database.DB.Model(&user).Updates(&user)

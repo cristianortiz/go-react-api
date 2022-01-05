@@ -55,9 +55,8 @@ func UpdateProduct(c *fiber.Ctx) error {
 	//id in http request is a string, cast to the int type for query to DB
 	id, _ := strconv.Atoi(c.Params("id"))
 
-	product := models.Product{
-		Id: uint(id),
-	}
+	product := models.Product{}
+	product.Id = uint(id)
 	err := c.BodyParser(&product)
 	if err != nil {
 		return err
@@ -75,9 +74,9 @@ func DeleteProduct(c *fiber.Ctx) error {
 	//id in http request is a string, cast to the int type for query to DB
 	id, _ := strconv.Atoi(c.Params("id"))
 
-	product := models.Product{
-		Id: uint(id),
-	}
+	product := models.Product{}
+	//for embebed model
+	product.Id = uint(id)
 	err := c.BodyParser(&product)
 	if err != nil {
 		return err

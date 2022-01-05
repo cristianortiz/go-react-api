@@ -26,5 +26,5 @@ func Connect() {
 
 //Automigrate function  calls the gorm.automigrate function
 func AutoMigrate() {
-	DB.AutoMigrate(models.User{}, models.Product{})
+	DB.AutoMigrate(models.User{}, models.Product{}, models.Link{}, models.Order{}, models.OrderItem{})
 }
